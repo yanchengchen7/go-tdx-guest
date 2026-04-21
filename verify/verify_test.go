@@ -102,9 +102,11 @@ func TestPckCertificateExtensions(t *testing.T) {
 	ppidBytes := []byte{8, 157, 223, 219, 156, 3, 89, 200, 42, 59, 199, 113, 146, 57, 87, 78}
 	fmspcBytes := []byte{80, 128, 111, 0, 0, 0}
 	pceIDBytes := []byte{0, 0}
+	piidBytes := []byte{140, 49, 77, 23, 210, 5, 223, 175, 203, 236, 187, 0, 252, 135, 239, 247}
 	pckExt.PPID = hex.EncodeToString(ppidBytes)
 	pckExt.FMSPC = hex.EncodeToString(fmspcBytes)
 	pckExt.PCEID = hex.EncodeToString(pceIDBytes)
+	pckExt.PIID = hex.EncodeToString(piidBytes)
 	pckExtTcb := &pcs.PckCertTCB{
 		PCESvn:           11,
 		CPUSvn:           []byte{3, 3, 2, 2, 2, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0},
