@@ -36,6 +36,7 @@ const (
 	fmspcSize            = 6
 	pceIDSize            = 2
 	tcbComponentSize     = 16
+	piidSize             = 16
 	// sgxPckCrlIssuerChainHeaderKey retrieves the issuer chain from the Intel PCS API:
 	// https://api.portal.trustedservices.intel.com/content/documentation.html#pcs-revocation-v4
 	sgxPckCrlIssuerChainHeaderKey = "SGX-PCK-CRL-Issuer-Chain"
@@ -75,6 +76,8 @@ var (
 	OidPCEID = asn1.ObjectIdentifier([]int{1, 2, 840, 113741, 1, 13, 1, 3})
 	// OidFMSPC  is the x509v3 extension for PCK certificate's SGX Extensions FMSPC value.
 	OidFMSPC = asn1.ObjectIdentifier([]int{1, 2, 840, 113741, 1, 13, 1, 4})
+	// OidPIID is the x509v3 extension for PCK certificate's SGX Extensions Platform Instance ID value.
+	OidPIID = asn1.ObjectIdentifier([]int{1, 2, 840, 113741, 1, 13, 1, 6})
 
 	// ErrPckExtInvalid error returned when parsing PCK certificate's extension returns leftover bytes
 	ErrPckExtInvalid = errors.New("unexpected leftover bytes for PCK certificate's extension")
@@ -182,6 +185,7 @@ type PckExtensions struct {
 	TCB   PckCertTCB
 	PCEID string
 	FMSPC string
+	PIID  string
 }
 
 // HexBytes struct contains hex decoded string to bytes value
@@ -432,6 +436,12 @@ func extractSgxExtensions(extensions []asn1.RawValue) (*PckExtensions, error) {
 		}
 		if sExtension.Type.Equal(OidFMSPC) {
 			pckExtension.FMSPC, err = extractAsn1OctetStringExtension("FMSPC", extensions[i], fmspcSize)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if sExtension.Type.Equal(OidPIID) {
+			pckExtension.PIID, err = extractAsn1OctetStringExtension("PIID", extensions[i], piidSize)
 			if err != nil {
 				return nil, err
 			}
