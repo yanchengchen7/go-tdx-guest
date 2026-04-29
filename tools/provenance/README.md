@@ -46,4 +46,4 @@ Path to a raw binary TDX quote file to extract PPID from. The quote must contain
 - `-verbose`: Enable verbose output.
 ## PPID Resolution Order
 
-If neither `-ppid` nor `-quote` is provided, the tool will attempt to fetch a TDX quote from the local system using the Linux TSM interface (`/sys/kernel/config/tsm/report`). This usually requires root privileges (`sudo`).
+If neither `-ppid` nor `-quote` is provided, the tool will attempt to fetch a TDX quote from the local system. This usually requires root privileges (`sudo`).

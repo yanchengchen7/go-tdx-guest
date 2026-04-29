@@ -30,18 +30,18 @@ func TestProvenance(t *testing.T) {
 		{
 			name:           "No Such Bucket",
 			ppid:           "abcdef1234567890abcdef1234567890",
-			bucket:         "test-bucket",
+			bucket:         "missing-bucket",
 			serverResponse: "NoSuchBucket",
 			serverStatus:   http.StatusNotFound,
-			wantErr:        "gcs request failed: bucket 'test-bucket' not found",
+			wantErr:        "gcs request failed: bucket 'missing-bucket' not found",
 		},
 		{
 			name:           "No Such Key",
-			ppid:           "abcdef1234567890abcdef1234567890",
+			ppid:           "0000000000000000000000000000000a",
 			bucket:         "test-bucket",
 			serverResponse: "NoSuchKey",
 			serverStatus:   http.StatusNotFound,
-			wantErr:        "gcs request failed: file 'abcdef1234567890abcdef1234567890.json' not found in bucket 'test-bucket'",
+			wantErr:        "gcs request failed: file '0000000000000000000000000000000a.json' not found in bucket 'test-bucket'",
 		},
 		{
 			name:           "Server Error",

@@ -22,7 +22,7 @@ import (
 const gcsBaseURL = "https://storage.googleapis.com"
 
 var (
-	ppidFlag       = flag.String("ppid", "", "Direct PPID string to use")
+	ppidFlag       = flag.String("ppid", "", "PPID as a 32-character hex string")
 	quoteFileFlag  = flag.String("quote", "", "Path to a raw binary TDX quote file to extract PPID from")
 	bucketNameFlag = flag.String("bucket", "gca-placeholder-bucket", "The public GCS bucket name to fetch the provenance document from")
 	outputFlag     = flag.String("out", "", "Path to output file to write provenance data to. Default is stdout.")
@@ -39,7 +39,8 @@ func debugf(format string, a ...any) {
 }
 
 // getPPIDFromQuote extracts the PPID from the PCK certificate embedded in the TDX quote.
-// The quote must be in a format that verify.ExtractChainFromQuote can handle (e.g., *pb.Quote or raw bytes).
+// The quote must be a proto type accepted by verify.ExtractChainFromQuote (*pb.QuoteV4 or *pb.QuoteV5);
+// raw bytes must be parsed via abi.QuoteToProto first.
 func getPPIDFromQuote(quote any) (string, error) {
 	chain, err := verify.ExtractChainFromQuote(quote)
 	if err != nil {
